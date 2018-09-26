@@ -27,12 +27,15 @@ namespace ReverseMarkdown.Converters
 
 		private bool IsTableHeaderRow(HtmlNode node)
 		{
-			return node.ChildNodes.FindFirst("th")!=null;
+            return node.ChildNodes.FindFirst("th") != null ||
+                   // If this is the first "tr" in the table, assume we have a header. 
+                   node.PreviousSibling == null;
 		}
 
 		private string UnderlineFor(HtmlNode node)
 		{
-			int colCount = node.ChildNodes.Where(child => child.Name.Contains("th")).Count();
+            // Count the number of header rows, or cells in the row.
+			int colCount = node.ChildNodes.Where(child => child.Name.Contains("th") || child.Name.Contains("td")).Count();
 
 			List<string> cols = new List<string>();
 
