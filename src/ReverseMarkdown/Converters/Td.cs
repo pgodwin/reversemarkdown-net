@@ -1,5 +1,6 @@
 ﻿
 using HtmlAgilityPack;
+using System;
 
 namespace ReverseMarkdown.Converters
 {
@@ -16,7 +17,9 @@ namespace ReverseMarkdown.Converters
 		public override string Convert(HtmlNode node)
 		{
 			string content = this.TreatChildren(node);
-			return string.Format(" {0} |", content);
+            // Fix up newlines in tables (Issue #21)
+            content = content.Replace(Environment.NewLine, "<br>");
+            return string.Format(" {0} |", content);
 		}
 	}
 }
